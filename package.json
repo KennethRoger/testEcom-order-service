@@ -1,0 +1,26 @@
+{
+  "name": "order-service",
+  "version": "1.0.0",
+  "description": "testecom order service",
+  "homepage": "https://github.com/KennethRoger/testEcom-order-service#readme",
+  "bugs": {
+    "url": "https://github.com/KennethRoger/testEcom-order-service/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennethRoger/testEcom-order-service.git"
+  },
+  "license": "ISC",
+  "author": "Kenneth Roger",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.4",
+    "sequelize": "^6.37.7"
+  }
+}
