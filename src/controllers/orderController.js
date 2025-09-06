@@ -5,7 +5,7 @@ const HttpStatus = require("../utils/httpStatusCodes");
 const createOrder = async (req, res, next) => {
   try {
     const productId = 0;
-    const userId = req.user.id;
+    const userId = req.user._id;
     if (!userId) return next(throwError(HttpStatus.BAD_REQUEST, "User ID is not found inisde user!"));
     const order = await orderRepo.create(userId, productId);
     res.status(HttpStatus.CREATED).json({
