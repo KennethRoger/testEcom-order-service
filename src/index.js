@@ -8,6 +8,8 @@ const sequelize = require("./models/mysql/connectDB");
 const orderRoutes = require("./routes/orderRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("<h1>Hello from order service</h1>");
 });
@@ -21,6 +23,10 @@ app.use(errorHandler);
   try {
     await sequelize.authenticate();
     console.log("DB connection established!");
+
+    await sequelize.sync({ alter: true });
+    console.log("Models synchronized with DB!");
+
     app.listen(PORT, (err) => {
       if (err) {
         console.error("Failed to listen to port ", PORT);

@@ -5,8 +5,11 @@ const HttpStatus = require("../utils/httpStatusCodes");
 const createOrder = async (req, res, next) => {
   try {
     const productId = 0;
-    const userId = req.user._id;
-    if (!userId) return next(throwError(HttpStatus.BAD_REQUEST, "User ID is not found inisde user!"));
+    const userId = req.headers["x-user-id"];
+    console.log(userId);
+
+    if (!userId)
+      return next(throwError("User ID is not found!", HttpStatus.BAD_REQUEST));
     const order = await orderRepo.create(userId, productId);
     res.status(HttpStatus.CREATED).json({
       success: true,
@@ -23,7 +26,7 @@ const getOrderById = async (req, res, next) => {
     const orderId = req.params.id;
     const order = await orderRepo.getOrderById(orderId);
     if (!order)
-      return next(throwError(HttpStatus.NOT_FOUND, "Order not found!"));
+      return next(throwError("Order not found!", HttpStatus.NOT_FOUND));
     res.status(HttpStatus.OK).json({
       success: true,
       message: "Order found!",
@@ -39,7 +42,7 @@ const cancelOrder = async (req, res, next) => {
     const orderId = req.params.id;
     const order = await orderRepo.getOrderById(orderId);
     if (!order)
-      return next(throwError(HttpStatus.NOT_FOUND, "Order not found!"));
+      return next(throwError("Order not found!", HttpStatus.NOT_FOUND));
 
     order.status = "cancelled";
     await order.save();
@@ -72,26 +75,26 @@ const updateOrderStatus = async (req, res, next) => {
     const { status } = req.body;
     if (!["pending", "shipped", "delivered", "cancelled"].includes(status))
       return next(
-        throwError(HttpStatus.BAD_REQUEST, "Unidentified order status")
+        throwError("Unidentified order status", HttpStatus.BAD_REQUEST)
       );
 
     const order = await orderRepo.getOrderById(orderId);
     if (!order)
-      return next(throwError(HttpStatus.NOT_FOUND, "Order not found!"));
+      return next(throwError("Order not found!", HttpStatus.NOT_FOUND));
 
     if (status === "cancelled")
       return next(
         throwError(
-          HttpStatus.FORBIDDEN,
-          "Unable to update the order status to cancelled!"
+          "Unable to update the order status to cancelled!",
+          HttpStatus.FORBIDDEN
         )
       );
 
     if (order.status === "delivered" || order.status === "cancelled")
       return next(
         throwError(
-          HttpStatus.FORBIDDEN,
-          "Order is either cancelled or delivered!"
+          "Order is either cancelled or delivered!",
+          HttpStatus.FORBIDDEN
         )
       );
     order.status = status;

@@ -3,7 +3,7 @@ const sequelize = require("../connectDB");
 
 const Order = sequelize.define("Order", {
   userId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   productId: {
